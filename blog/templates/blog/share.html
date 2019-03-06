@@ -1,0 +1,38 @@
+{% extends 'blog/base.html' %}
+
+    {% block title %}
+        Share this Blog
+    {% endblock %}
+
+    {% block body %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} alert alert-success"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <h2>Share {{obj.title}}?</h2>
+    <form action="."  method="POST" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+        {% if field.errors %}
+        <ul">
+            {% for error in field.errors %}
+            <li class="alert alert-danger">{{ error }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <p>{{ field.label_tag }}
+            <br>
+            {{ field }}
+            <br>
+            {% if field.help_text %}
+                <span style="color: red; font-size: 15px; font-style: italic;">Note: {{field.help_text}}</span>
+            {% endif %}
+        </p>
+        {% endfor %}
+        <input type="submit" class="btn btn-success" value="Submit">
+    </form>
+    <a href="{% url 'detail' obj.id %}"><button class="btn btn-warning" style="margin-top: 5px;">Cancel</button></a>
+    {% endblock %}

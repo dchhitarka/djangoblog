@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+    {% block title %}
+        Details of Your Blog
+    {% endblock %}
+    {% block body %}
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }} alert alert-success"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <h2>{{obj.title}}</h2>
+        <p>{{obj.create_time}}</p>
+        <h3>{{obj.text}}</h3>
+        <a href="{%url 'update' obj.id %}"><button class="btn btn-primary">Edit</button></a>
+        <a href="{%url 'delete' obj.id %}"><button class="btn btn-danger">Delete</button></a>
+        <a href="{%url 'share' obj.id %}"><button class="btn btn-info">Share</button></a>
+        <a href="{%url 'home' %}"><button class="btn btn-success">Back</button></a>
+        <hr>
+        <div class="container">
+        {% with comments.count as total_comments %}
+            <h4>{{ total_comments }} comment{{ total_comments|pluralize }}</h4>
+        {% endwith %}
+        {% for comment in comments %}
+            <div class="row">
+                <div class="comment col-6">
+                    <p class="info"><span class="img">avatar</span><span class="name">{{ comment.name }}</span>
+                        <br>
+                        <span class="crt">{{ comment.created }}</span>
+                    <hr>
+                    </p> <!-- Use {{ forloop.counter }} before by too count the no of comments -->
+                    <p class="comm">{{ comment.body|linebreaks }}</p>
+                </div>
+                <!--<div class="col-6"></div>-->
+            </div>
+            {% empty %}
+                <p>There are no comments yet.</p>
+        {% endfor %}
+        {% if new_comment %}
+            <h2>Your comment has been added.</h2>
+        {% else %}
+         <div class="add">
+            <h4>Add a new comment</h4>
+            <form action="." method="post">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <p><input type="submit" value="Add comment"></p>
+            </form>
+         </div>
+        {% endif %}
+        </div>
+    {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'blog/base.html' %}
+
+        {% block title %}
+            Home
+        {% endblock %}
+        {% block body %}
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }} alert alert-success"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="row">
+                <!--<div class="col-3"></div>-->
+                <ul class="col-8">
+            {% for q in qs %}
+        <!--Alternate URL option - "{{ q.id }}/detail" -->
+                    <li><a href="{% url 'detail' q.id %}">{{ q.title }}</a><br>
+                        <span class="time">{{q.create_time}}</span><br>
+                        <p>{{q.text}}</p>
+                        <hr>
+                    </li>
+            {% endfor %}
+                </ul>
+                <div class="col-3"></div>
+            </div>
+            <!--<a href="{% url 'create' %}">Write new blog!</a>-->
+
+        {% endblock %}
